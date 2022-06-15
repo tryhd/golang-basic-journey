@@ -61,6 +61,38 @@ func isValue(name string) string {
 	return "Good Bye" + name
 }
 
+//function as parameter
+type filter func(string) string
+
+// func sayHelloWithFilter(name string, filter func(string) string) {
+// 	nameFiltered := filter(name)
+// 	fmt.Println("Hello", nameFiltered)
+// }
+
+func sayHelloWithFilter(name string, filter filter) {
+	nameFiltered := filter(name)
+	fmt.Println("Hello", nameFiltered)
+}
+
+func spamFilter(name string) string {
+	if name == "Anjing" {
+		return "..."
+	} else {
+		return name
+	}
+}
+
+//anonymous function
+type BlackList func(string) bool
+
+func registerUser(name string, blacklist BlackList) {
+	if blacklist(name) {
+		fmt.Println("User", name, "dilarang masuk")
+	} else {
+		fmt.Println("User", name, "boleh masuk")
+	}
+}
+
 func main() {
 	sayHello()
 	print("\n")
@@ -94,4 +126,18 @@ func main() {
 	value := isValue
 
 	fmt.Println(value("Oki"))
+
+	sayHelloWithFilter("Oki", spamFilter)
+	sayHelloWithFilter("Anjing", spamFilter)
+
+	balaclist := func(name string) bool {
+		return name == "admin"
+	}
+
+	registerUser("Oki", balaclist)
+	registerUser("admin", balaclist)
+
+	registerUser("root", func(name string) bool {
+		return name == "root"
+	})
 }
